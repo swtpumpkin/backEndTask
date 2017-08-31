@@ -1,6 +1,7 @@
 const express = require('express') // 익스프레스
 const basicAuth = require('express-basic-auth') // 익스프레스 베이직 어스
 const morgan = require('morgan') // 모르간
+const bodyParser = require('body-parser')  // 바디파서
 
 const app = express() //express로 작동하게 함
 
@@ -11,7 +12,12 @@ const authMiddleware = basicAuth({
   challenge: true,
   realm: 'Imb4T3st4pp'
 })
-const data = []
+//
+const bodyParserMiddleware = bodyParser.urlencoded({ extended: false })
+// 데이터를 담을 변수
+const data = [
+  {num:1 , board:'아무말'}
+]
 
 //express가 ejs를 템플릿 엔진으로 사용 가능하게 셋팅
 app.set('view engine', 'ejs')
@@ -24,6 +30,23 @@ app.use('/static', express.static('public'))
 //index.ejs file을 localhost에 랜더링 함.
 app.get('/', (req, res)=>{
   res.render('index.ejs', {data})
+})
+
+//게시판에 글 올릴 수 있도록 한다.
+app.post('/', bodyParserMiddleware,  (req,res) => {
+  const board = req.body.board
+  let num // 오름차순을 위한 변수
+  let numIncrease = 1;
+  while(true) {
+    const matched = data.find(item => item.num === numIncrease)
+    if(!matched){
+      num = numIncrease
+      break
+    }
+    numIncrease++
+  }
+  data.push({num, board}) // 객체는 순서가 보장되지 않기때문에 프로퍼티명의 순서를 지킬 필요는 없다.
+  res.redirect('/') // 302 응답코드
 })
 
 //터미널에서 서버를 작동 시 listening...이라는 메세지가 표출되도록 하는 console

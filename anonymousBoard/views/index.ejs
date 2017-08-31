@@ -9,5 +9,29 @@
 </head>
 <body>
   <h1>Hello Node.js~</h1>
+  <div>
+    <p>익명게시판</p>
+    <form action="/" method="post">
+      <input type="text" name="board">
+      <input type="reset" value = "삭제">
+      <input type="submit" value="게시">
+    </form>
+    <table>
+      <thead>
+        <tr>
+          <td>번호</td>
+          <td>내용</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.forEach(item=>{%>
+        <tr>
+          <td><%= item.num %></td>
+          <td><%= item.board %></td>
+        </tr>
+        <% })%>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>
