@@ -1,0 +1,19 @@
+{
+  "name": "anonymousBoard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "express-basic-auth": "^1.1.2",
+    "morgan": "^1.8.2"
+  }
+}
