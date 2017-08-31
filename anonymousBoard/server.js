@@ -18,6 +18,8 @@ app.set('view engine', 'ejs')
 
 //http loger 로그기록남김
 app.use(morgan('tiny')) 
+//public파일을 static에 저장
+app.use('/static', express.static('public')) 
 
 //index.ejs file을 localhost에 랜더링 함.
 app.get('/', (req, res)=>{
