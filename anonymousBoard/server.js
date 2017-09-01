@@ -16,14 +16,17 @@ const authMiddleware = basicAuth({
 const bodyParserMiddleware = bodyParser.urlencoded({ extended: false })
 // 데이터를 담을 변수
 const data = [
-  {num:1 , board:'아무말'}
+  { num:1,
+    title:'제목',
+    board:'아무말'
+  }
 ]
 
 //express가 ejs를 템플릿 엔진으로 사용 가능하게 셋팅
 app.set('view engine', 'ejs')
 
 //http loger 로그기록남김
-app.use(morgan('tiny')) 
+app.use(morgan('tiny'))
 //public파일을 static에 저장
 app.use('/static', express.static('public')) 
 
@@ -31,10 +34,14 @@ app.use('/static', express.static('public'))
 app.get('/', (req, res)=>{
   res.render('index.ejs', {data})
 })
+//border.ejs file을 localhost에 랜더링 함.
+app.get('/board', (req, res)=>{
+  res.render('board.ejs')
+})
 
 //게시판에 글 올릴 수 있도록 한다.
-app.post('/', bodyParserMiddleware,  (req,res) => {
-  const board = req.body.board
+app.post('/', bodyParserMiddleware, (req,res) => {
+  const title = req.body.title
   let num // 오름차순을 위한 변수
   let numIncrease = 1;
   while(true) {
@@ -45,7 +52,7 @@ app.post('/', bodyParserMiddleware,  (req,res) => {
     }
     numIncrease++
   }
-  data.push({num, board}) // 객체는 순서가 보장되지 않기때문에 프로퍼티명의 순서를 지킬 필요는 없다.
+  data.push({num, title}) // 객체는 순서가 보장되지 않기때문에 프로퍼티명의 순서를 지킬 필요는 없다.
   res.redirect('/') // 302 응답코드
 })
 

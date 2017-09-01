@@ -2,3 +2,13 @@ body {
   text-align: center;
   background: skyblue;
 }
+table {
+  display: inline-block;
+  width: 1000px;
+  background: palevioletred;
+}
+
+.board {
+  line-height: 50px;
+  width: 400px;
+}
