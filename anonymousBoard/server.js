@@ -38,6 +38,21 @@ app.get('/', (req, res)=>{
 app.get('/board', (req, res)=>{
   res.render('board.ejs')
 })
+//read.ejs file을 localhost에 랜더링 함.
+app.get('/read', (req, res)=>{
+  res.render('read.ejs')
+})
+//
+app.get('/read/:num', (req, res)=> {
+  const num = (req.params.num)*1
+  const matched = [...data].find(item => item.num === num)
+  if(!matched) {
+    res.status(404)
+    res.send('404 Not Found')
+  }else {
+    res.render('read.ejs')
+  }
+})
 
 //게시판에 글 올릴 수 있도록 한다.
 app.post('/', bodyParserMiddleware, (req,res) => {

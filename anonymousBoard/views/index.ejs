@@ -25,7 +25,7 @@
         <% data.forEach(item=>{%>
         <tr>
           <td><%= item.num %></td>
-          <td><a href=""><%= item.title %></a></td>
+          <td><a href="/read/<%= item.num%>"><%= item.title %></a></td>
         </tr>
         <% })%>
       </tbody>
