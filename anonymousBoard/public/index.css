@@ -1,11 +1,11 @@
 body {
   text-align: center;
-  background: skyblue;
+  background: #B2DEEF;
 }
 table {
   display: inline-block;
   width: 1000px;
-  background: palevioletred;
+  background: #EC8FAD;
 }
 
 .board {

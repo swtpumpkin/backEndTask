@@ -15,12 +15,8 @@ const authMiddleware = basicAuth({
 //
 const bodyParserMiddleware = bodyParser.urlencoded({ extended: false })
 // 데이터를 담을 변수
-const data = [
-  { num:1,
-    title:'제목',
-    board:'아무말'
-  }
-]
+const data = [{}]
+const comment = [{}]
 
 //express가 ejs를 템플릿 엔진으로 사용 가능하게 셋팅
 app.set('view engine', 'ejs')
@@ -42,21 +38,27 @@ app.get('/board', (req, res)=>{
 app.get('/read', (req, res)=>{
   res.render('read.ejs')
 })
+// 관리자 모드 페이지(삭제 구현)
+app.get('/manage', authMiddleware,(req, res)=>{
+  res.render('manage.ejs')
+})
 //
 app.get('/read/:num', (req, res)=> {
-  const num = (req.params.num)*1
+  const num = req.params.num*1
   const matched = [...data].find(item => item.num === num)
+  console.log(matched)
   if(!matched) {
     res.status(404)
     res.send('404 Not Found')
   }else {
-    res.render('read.ejs')
+    res.render('read.ejs', {matched})
   }
 })
 
 //게시판에 글 올릴 수 있도록 한다.
 app.post('/', bodyParserMiddleware, (req,res) => {
   const title = req.body.title
+  const board = req.body.board
   let num // 오름차순을 위한 변수
   let numIncrease = 1;
   while(true) {
@@ -67,7 +69,14 @@ app.post('/', bodyParserMiddleware, (req,res) => {
     }
     numIncrease++
   }
-  data.push({num, title}) // 객체는 순서가 보장되지 않기때문에 프로퍼티명의 순서를 지킬 필요는 없다.
+  data.push({num, title, board}) // 객체는 순서가 보장되지 않기때문에 프로퍼티명의 순서를 지킬 필요는 없다.
+  res.redirect('/') // 302 응답코드
+})
+// 코멘트
+app.post('/', bodyParserMiddleware, (req,res) => {
+  const oidx = req.body.oidx
+  const comment = req.body.comment
+  data.matched.push(rep.comment) // 객체는 순서가 보장되지 않기때문에 프로퍼티명의 순서를 지킬 필요는 없다.
   res.redirect('/') // 302 응답코드
 })
 
