@@ -15,8 +15,8 @@ const authMiddleware = basicAuth({
 //
 const bodyParserMiddleware = bodyParser.urlencoded({ extended: false })
 // 데이터를 담을 변수
-const data = [{}]
-const comment = [{}]
+const data = [{title: '제목' , board: '내용' , num: 1}]
+const comment = [{num:1, reply:'댓글'}]
 
 //express가 ejs를 템플릿 엔진으로 사용 가능하게 셋팅
 app.set('view engine', 'ejs')
@@ -38,20 +38,22 @@ app.get('/board', (req, res)=>{
 app.get('/read', (req, res)=>{
   res.render('read.ejs')
 })
+
 // 관리자 모드 페이지(삭제 구현)
 app.get('/manage', authMiddleware,(req, res)=>{
   res.render('manage.ejs')
 })
-//
+
+//본문 글 페이지 구현
 app.get('/read/:num', (req, res)=> {
   const num = req.params.num*1
-  const matched = [...data].find(item => item.num === num)
-  console.log(matched)
-  if(!matched) {
+  const matched = data.find(item => item.num === num)
+  const matchedCom = [...comment].filter(items => items.num === num)
+  if(matched && matchedCom) {
+    res.render('read.ejs', {matched, matchedCom})
+  }else {
     res.status(404)
     res.send('404 Not Found')
-  }else {
-    res.render('read.ejs', {matched})
   }
 })
 
@@ -72,12 +74,13 @@ app.post('/', bodyParserMiddleware, (req,res) => {
   data.push({num, title, board}) // 객체는 순서가 보장되지 않기때문에 프로퍼티명의 순서를 지킬 필요는 없다.
   res.redirect('/') // 302 응답코드
 })
-// 코멘트
-app.post('/', bodyParserMiddleware, (req,res) => {
-  const oidx = req.body.oidx
-  const comment = req.body.comment
-  data.matched.push(rep.comment) // 객체는 순서가 보장되지 않기때문에 프로퍼티명의 순서를 지킬 필요는 없다.
-  res.redirect('/') // 302 응답코드
+
+// 댓글 구현
+app.post('/read/:num', bodyParserMiddleware, (req,res) => {
+  const num = req.params.num*1
+  const reply = req.body.reply
+  comment.push({num, reply}) // 객체는 순서가 보장되지 않기때문에 프로퍼티명의 순서를 지킬 필요는 없다.
+  res.redirect('/read/'+num) // 302 응답코드
 })
 
 //터미널에서 서버를 작동 시 listening...이라는 메세지가 표출되도록 하는 console

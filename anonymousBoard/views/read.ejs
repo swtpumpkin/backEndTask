@@ -9,10 +9,13 @@
 <body>
   <h1><%= matched.title %></h1>
   <div><%= matched.board %></div>
-  <form action="/" method="post">
-    <input type="hidden" name="oidx" vlaue="<%= matched.num %>">
-    <input type="text"  name="comment">
+  <form action="/read/<%= matched.num %>" method="post">
+    <input type="hidden" name="num" vlaue="<%= matched.num %>">
+    <input type="text"  name="reply">
     <input type="submit" value="게시">
   </form>
+  <div<% matchedCom.forEach(item => {%>>
+    <p><%= item.reply %></p>
+  </div<% })%>>
 </body>
 </html>
