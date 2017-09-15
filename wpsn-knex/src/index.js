@@ -67,7 +67,10 @@ app.get('/:id', (req, res, nest)=> {
   query.getUrlById(req.params.id)
     .then(entry => {
       if(entry){
-        res.redirect(entry.long_url)
+        query.incrementClickCountById(entry.id)
+          .then(()=>{
+            res.redirect(entry.long_url)
+          })
       }else {
         next()
       }

@@ -30,5 +30,10 @@ module.exports = {
     return knex('url_entry')
       .where({id})
       .first()
+  },
+  incrementClickCountById(id) {
+    return knex('url_shortener')
+      .where({id})
+      .increment('click_count', 1)
   }
 }
