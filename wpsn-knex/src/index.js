@@ -63,7 +63,7 @@ app.post('/url_entry', authMiddleware, urlencodedMiddleware, (req, res) => {
     })
 })
 
-app.get('/:id', (req, res, nest)=> {
+app.get('/:id', (req, res, next)=> {
   query.getUrlById(req.params.id)
     .then(entry => {
       if(entry){
@@ -75,6 +75,18 @@ app.get('/:id', (req, res, nest)=> {
         next()
       }
     })
+})
+
+app.get('/register', (req, res)=> {
+  res.render('register.ejs')
+})
+
+app.post('/register', urlencodedMiddleware, (req, res)=>{
+  query.createUser(req.body.id, req.body.password)
+  .then(()=>{
+    req.session.id = req.body.id
+    res.redirect('/')
+  })
 })
 
 app.listen(3000, () => {

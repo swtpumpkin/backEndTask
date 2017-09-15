@@ -35,5 +35,9 @@ module.exports = {
     return knex('url_shortener')
       .where({id})
       .increment('click_count', 1)
+  },
+  createUser(id, password) {
+    return knex('user')
+      .insert({id, password})
   }
 }
