@@ -1,5 +1,6 @@
 const knex = require('./knex')
 const randomstring = require('randomstring')
+const validator = require('validator')
 
 module.exports = {
   getUserById(id){
@@ -13,6 +14,11 @@ module.exports = {
     .orderBy('created_at', 'desc')
   },
   createUrlEntry(long_url, user_id) {
+    const valid = validator.isURL(long_url)
+    if(!valid){
+      // throw new Error('url이 올바르지 않습니다.')
+      return Promise.reject(new Error('url이 올바르지 않습니다.'))
+    }
     const id = randomstring.generate(8)
     return knex('url_entry')
       .insert({
