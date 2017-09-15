@@ -12,11 +12,6 @@ module.exports = {
     .where({user_id})
     .orderBy('created_at', 'desc')
   },
-  getUser(id, password){
-    return knex('user')
-    .where({id, password})
-    .first()
-  },
   createUrlEntry(long_url, user_id) {
     const id = randomstring.generate(8)
     return knex('url_entry')
