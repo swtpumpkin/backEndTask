@@ -1,0 +1,49 @@
+<!doctype html>
+<html ng-app="myTodo">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Node/Angular Todo App</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <style>
+        html            { overflow-y:scroll; }
+        body            { padding-top:50px; }
+        #todo-list      { margin-bottom:30px; }
+        #todo-form      { margin-bottom:50px; }
+    </style>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script src="todo.js"></script>
+</head>
+<body ng-controller="mainController">
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1>Todo-holic <span class="label label-info">{{ todos.length }}</span></h1>
+        </div>
+        <p align="right">[ 참고 : 체크하면 todo 삭제됩니다!!! ]</p>
+        <div id="todo-list" class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <div ng-repeat="todo in todos">
+                    <label>
+                        <input type="checkbox" style="width:1.5em;height:1.5em;padding:2px;" ng-click="deleteTodo(todo._id)">
+                        <span style="vertical-align:5px">{{ todo.text }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="todo-form" class="row">
+            <div class="col-sm-8 col-sm-offset-2 text-center">
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg text-center" placeholder="todo 를 입력하세요!!!" ng-model="formData.text">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
+                </form>
+            </div>
+        </div>
+        <div class="text-center text-muted">
+            <p>[ Copyleft, by,  My, site ]</p>
+        </div>
+    </div>
+</body>
+</html>
