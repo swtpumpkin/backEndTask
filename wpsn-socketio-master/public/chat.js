@@ -33,15 +33,22 @@ document.addEventListener('DOMContentLoaded', e => {
   formEl.addEventListener('submit', e => {
     e.preventDefault()
     const message = formEl.elements.message.value
-    socket.emit('new chat', {message})
-    appendText(messageListEl, formatMessage({username,  message}))
+    const messageEl = appendText(messageListEl, formatMessage({username,  message}))
+    socket.emit('new chat', {message}, data => {
+      // 메세지 전송이 잘 되었다는 표시를 해주면 됨
+      messageEl.classList.remove('new')
+    })
+
     //폼의 내용 지움
     formEl.reset()
   })
 
   // (chat) 채팅 메시지가 올 때마다 출력
   socket.on('chat', data => {
-    appendText(messageListEl, formatMessage(data))
+    const messageEl = appendText(messageListEl, formatMessage(data))
+    setTimeout(() => {
+      messageEl.classList.remove('new')
+    })
   })
 
   // (user connected) 새 사용자가 접속한 사실을 출력
