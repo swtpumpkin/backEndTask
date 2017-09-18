@@ -1,0 +1,17 @@
+extends layouts/main
+
+block content
+  form(action="/register", method="post").p-3
+    input(type="hidden", name="_csrf", value=csrfToken)
+    h1 Register
+    .form-group
+      label(for="input-username", required) Username
+      input.form-control#input-username(type="text", name="username")
+    .form-group
+      label(for="input-password", required) Password
+      input.form-control#input-password(type="password", name="password")
+      // 아래와 같이 태그의 맨 뒤에 .을 붙이면 여러 줄의 내용을 자유롭게 입력 가능
+      small.form-text.text-muted.
+        8자 이상의 암호를
+        입력하세요.
+    button.btn.btn-primary(type="submit") Register
