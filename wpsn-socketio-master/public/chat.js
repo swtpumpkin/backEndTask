@@ -34,13 +34,14 @@ document.addEventListener('DOMContentLoaded', e => {
     e.preventDefault()
     const message = formEl.elements.message.value
     socket.emit('new chat', {message})
+    appendText(messageListEl, formatMessage({username,  message}))
     //폼의 내용 지움
     formEl.reset()
   })
 
   // (chat) 채팅 메시지가 올 때마다 출력
   socket.on('chat', data => {
-    appendText(messageListEl, `${data.username}:${data.message}`)
+    appendText(messageListEl, formatMessage(data))
   })
 
   // (user connected) 새 사용자가 접속한 사실을 출력
