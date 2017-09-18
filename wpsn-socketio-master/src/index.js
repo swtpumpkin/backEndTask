@@ -131,7 +131,9 @@ chatNsp.on('connection', socket => {
   // chat 이벤트
   // 성공적으로 전송되었다는 사실을 클라이언트에 알림
   // 해당 클라이언트를 제외한 모든 클라이언트에게 메시지 전송
-
+  socket.on('new chat', data => {
+  chatNsp.emit('chat', data)
+  })
 
   // disconnect 내장 이벤트
   // 한 클라이언트의 연결이 끊어졌을 때
