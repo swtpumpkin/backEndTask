@@ -1,0 +1,13 @@
+extends layout/main.pug
+
+block body
+  h1 index
+
+  p 현재 로그인 된 사용자의 인증 제공자: #{req.user.provider}
+  p 현재 로그인 된 사용자의 식별자: #{req.user.provider_user_id}
+  p
+    img(src=req.user.avatar_url)
+
+  form(action='/logout', method='post')
+    input(type='hidden', name='_csrf', value=csrfToken)
+    button(type='submit') 로그아웃
