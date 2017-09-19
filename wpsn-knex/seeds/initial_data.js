@@ -7,7 +7,7 @@ exports.seed = function(knex, Promise) {
   return knex('user')
     .insert({
       id: 'fast',
-      password: bcrypt.hashSync('campus')
+      password: bcrypt.hashSync('campus', 10)
   })
   .then(()=>{
     const arr = []
