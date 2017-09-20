@@ -9,6 +9,7 @@ const flash = require('connect-flash')
 const passport = require('passport')
 const GitHubStrategy = require('passport-github').Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy
+const FacebookStrategy = require('passport-facebook').Strategy
 
 const util = require('./util')
 const query = require('./query')
@@ -88,6 +89,24 @@ passport.use(new GoogleStrategy({
   })
 }))
 
+passport.use(new FacebookStrategy({
+  clientID: process.env.FACEBOOK_CLIENT_ID,
+  clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+  callbackURL: process.env.FACEBOOK_CALLBACK_URL
+}, (accessToken, refreshToken, profile, photos, done) => {
+  // const avatar_url = profile.photos[0] ? profile.photos[0].value : null
+  query.firstOrCreateUserByProvider(
+    'facebook',
+    profile.id,
+    accessToken//,
+    // avatar_url
+  ).then(user => {
+    done(null, user)
+  }).catch(err => {
+    done(err)
+  })
+}))
+
 app.get('/', mw.loginRequired, (req, res) => {
   res.render('index.pug', req.user)
 })
@@ -119,6 +138,13 @@ app.get('/auth/google/callback', passport.authenticate('google', {
   failureFlash: true
 }))
 
+app.get('/auth/facebook', passport.authenticate('facebook'))
+
+app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
 
 app.listen(PORT, () => {
   console.log(`listening ${PORT}...`)
