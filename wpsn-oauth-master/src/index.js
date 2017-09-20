@@ -10,6 +10,7 @@ const passport = require('passport')
 const GitHubStrategy = require('passport-github').Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const FacebookStrategy = require('passport-facebook').Strategy
+const NaverStrategy = require('passport-naver').Strategy
 
 const util = require('./util')
 const query = require('./query')
@@ -107,6 +108,24 @@ passport.use(new FacebookStrategy({
   })
 }))
 
+passport.use(new NaverStrategy({
+  clientID: process.env.NAVER_CLIENT_ID,
+  clientSecret: process.env.NAVER_CLIENT_SECRET,
+  callbackURL: process.env.NAVER_CALLBACK_URL
+}, (accessToken, refreshToken, profile, done) => {
+  const avatar_url = profile._json.profile_image ? profile._json.profile_image : null
+  query.firstOrCreateUserByProvider(
+    'naver',
+    profile.id,
+    accessToken,
+    avatar_url
+  ).then(user => {
+    done(null, user)
+  }).catch(err => {
+    done(err)
+  })
+}))
+
 app.get('/', mw.loginRequired, (req, res) => {
   res.render('index.pug', req.user)
 })
@@ -141,6 +160,14 @@ app.get('/auth/google/callback', passport.authenticate('google', {
 app.get('/auth/facebook', passport.authenticate('facebook'))
 
 app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
+
+app.get('/auth/naver', passport.authenticate('naver'))
+
+app.get('/auth/naver/callback', passport.authenticate('naver', {
   successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true
