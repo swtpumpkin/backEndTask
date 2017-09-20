@@ -93,13 +93,13 @@ passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
   callbackURL: process.env.FACEBOOK_CALLBACK_URL
-}, (accessToken, refreshToken, profile, photos, done) => {
-  // const avatar_url = profile.photos[0] ? profile.photos[0].value : null
+}, (accessToken, refreshToken, profile, done) => {
+  const avatar_url = profile.profileUrl ? profile.profileUrl.value : null
   query.firstOrCreateUserByProvider(
     'facebook',
     profile.id,
-    accessToken//,
-    // avatar_url
+    accessToken,
+    avatar_url
   ).then(user => {
     done(null, user)
   }).catch(err => {
