@@ -8,6 +8,7 @@ const csurf = require('csurf')
 const flash = require('connect-flash')
 const passport = require('passport')
 const GitHubStrategy = require('passport-github').Strategy
+const GoogleStrategy = require('passport-google-oauth20').Strategy
 
 const util = require('./util')
 const query = require('./query')
@@ -69,6 +70,24 @@ passport.use(new GitHubStrategy({
   })
 }))
 
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL
+}, (accessToken, refreshToken, profile, done) => {
+  const avatar_url = profile.photos[0] ? profile.photos[0].value : null
+  query.firstOrCreateUserByProvider(
+    'google',
+    profile.id,
+    accessToken,
+    avatar_url
+  ).then(user => {
+    done(null, user)
+  }).catch(err => {
+    done(err)
+  })
+}))
+
 app.get('/', mw.loginRequired, (req, res) => {
   res.render('index.pug', req.user)
 })
@@ -85,6 +104,16 @@ app.post('/logout', (req, res) => {
 app.get('/auth/github', passport.authenticate('github'))
 
 app.get('/auth/github/callback', passport.authenticate('github', {
+  successRedirect: '/',
+  failureRedirect: '/login',
+  failureFlash: true
+}))
+
+app.get('/auth/google', passport.authenticate('google', {
+  scope: ['profile']
+}))
+
+app.get('/auth/google/callback', passport.authenticate('google', {
   successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true
