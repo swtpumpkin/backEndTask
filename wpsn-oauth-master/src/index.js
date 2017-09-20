@@ -93,9 +93,10 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-  callbackURL: process.env.FACEBOOK_CALLBACK_URL
+  callbackURL: process.env.FACEBOOK_CALLBACK_URL,
+  profileFields: ['id', 'displayName', 'photos', 'email']
 }, (accessToken, refreshToken, profile, done) => {
-  const avatar_url = profile.profileUrl ? profile.profileUrl.value : null
+  const avatar_url = profile.photos[0] ? profile.photos[0].value : null
   query.firstOrCreateUserByProvider(
     'facebook',
     profile.id,
@@ -157,7 +158,10 @@ app.get('/auth/google/callback', passport.authenticate('google', {
   failureFlash: true
 }))
 
-app.get('/auth/facebook', passport.authenticate('facebook'))
+app.get('/auth/facebook', passport.authenticate('facebook', {
+  //authType: 'rerequest',
+  scope: ['public_profile', 'manage_pages']
+}))
 
 app.get('/auth/facebook/callback', passport.authenticate('facebook', {
   successRedirect: '/',
