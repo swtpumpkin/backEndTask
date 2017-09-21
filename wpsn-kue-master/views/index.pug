@@ -1,0 +1,23 @@
+extends layout/main.pug
+
+block content
+  form(action='/', enctype='multipart/form-data', method='post')
+    input(type='hidden', name='_csrf', value=csrfToken)
+    label
+      span 이미지 파일 (파일 크기는 1MB를 넘을 수 없습니다.)
+      input(type='file', name='image', required)
+    label
+      span 제목 (선택사항)
+      input(type='text', name='title')
+    label
+      span 설명 (선택사항)
+      input(type='text', name='description')
+    button(type='submit') 업로드
+
+  .entries
+    each entry in entries
+      .entry
+        h2= entry.title
+        p= entry.description
+        a(href=entry.original_url)
+          img(src=entry.thumbnail_url)
