@@ -7,15 +7,17 @@
   <title>본문 게시판</title>
 </head>
 <body>
-  <h1><%= matched.title %></h1>
-  <div><%= matched.board %></div>
-  <form action="/read/<%= matched.num %>" method="post">
-    <input type="hidden" name="num" vlaue="<%= matched.num %>">
-    <input type="text"  name="reply">
-    <input type="submit" value="게시">
-  </form>
-  <div<% matchedCom.forEach(item => {%>>
-    <p><%= item.reply %></p>
-  </div<% })%>>
+  <div class = "container">
+    <h1><%= matched.title %></h1>
+    <div><%= matched.board %></div>
+    <form action="/read/<%= matched.num %>" method="post">
+      <input type="hidden" name="num" vlaue="<%= matched.num %>">
+      <input type="text"  name="reply">
+      <input type="submit" value="게시">
+    </form>
+    <div<% matchedCom.forEach(item => {%>>
+      <p><%= item.reply %></p>
+    </div<% })%>>
+  </div>
 </body>
 </html>

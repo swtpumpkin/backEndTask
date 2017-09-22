@@ -5,19 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>익명게시판</title>
-  <link rel="stylesheet" href="/static/index.css">
+  <link rel="stylesheet" href="/static/bootstrap.css">
 </head>
 <body>
-  <h1>Hello Node.js~</h1>
-  <div>
+  <div class="container">
     <h2>익명게시판</h2>
     <form action="/board" method="get">
-      <input type="submit" value="새글">
+      <input type="submit" class="btn btn-outline-primary" value="새글">
     </form>
     <form action="/manage" method="get">
-      <input type="submit" value="관리자모드">
+      <input type="submit" class="btn btn-warning" value="관리자모드">
     </form>
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <td>번호</td>
