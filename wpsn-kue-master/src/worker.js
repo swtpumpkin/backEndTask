@@ -15,7 +15,7 @@ queue.process('thumbnail', (job, done) => {
     .then(imageEntry => {
       // 원본 이미지 다운로드
       axios.get(imageEntry.original_url, {
-        responseType: 'arrayBuffer'
+        responseType: 'arraybuffer'
       }).then(res => {
         // 썸네일 생성
         return sharp(res.data)

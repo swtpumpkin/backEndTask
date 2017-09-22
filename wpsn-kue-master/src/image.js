@@ -28,7 +28,7 @@ function uploadImageFile(buffer) {
       ACL: 'public-read', // 익명의 사용자도 파일 경로만 알면 읽기 가능하도록 설정
       Body: buffer,
       Bucket: process.env.S3_BUCKET_NAME,
-      Key: `${uuid.v4().${ext}}`, // 파일이름을 uuid로 저장
+      Key: `${uuid.v4()}.${ext}`, // 파일이름을 uuid로 저장
       ContentDisposition: 'inline',
       ContentType: mime
     }, (err, data) => {
@@ -66,7 +66,7 @@ function uploadOriginalFile(file) {
  */
 function createThumbnailJob(queue, id) {
   return new Promise((resolve, reject) => {
-    queue.create('thumbnail'. {id})
+    queue.create('thumbnail', {id})
       .removeOnComplete(true)
       .save(err => {
         if(err) {
