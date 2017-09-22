@@ -2,13 +2,25 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const query = require('./query')
 const jwt = require('jsonwebtoken')
+const expressjwt = require('express-jwt')
 
 const app = express()
 
 app.use(bodyParser.json())
 
-app.post('/user', (req, res) => {
+const jwtMiddleware = expressjwt({secret: 'mysecret'})
 
+app.get('/user', jwtMiddleware, (req, res) => {
+  query.getUserById(req.user.id)
+    .then(user => {
+      res.send({
+        username: user.username
+      })
+    })
+
+})
+
+app.post('/user', (req, res) => {
   // 사용자 생성
   const {username, password} = req.body
   query.createUser(username, password)

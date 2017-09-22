@@ -33,5 +33,10 @@ module.exports = {
         }
         throw new Error('일치하는 사용자가 없습니다.')
       })
+  },
+  getUserById(id){
+    return knex('user')
+      .where({id})
+      .first()
   }
 }
