@@ -3,10 +3,12 @@ const bodyParser = require('body-parser')
 const query = require('./query')
 const jwt = require('jsonwebtoken')
 const expressjwt = require('express-jwt')
-
+const cors = require('cors')
 const app = express()
 
 app.use(bodyParser.json())
+app.use(cors())
+
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).send({
@@ -65,6 +67,7 @@ app.get('/todos', jwtMiddleware, (req, res) => {
 app.post('/todos', jwtMiddleware, (req, res) => {
   const user_id = req.user.id
   const title = req.body.title
+  console.log(req.body)
   query.createTodo(user_id, title)
     .then(([id]) => {
       return query.getTodosById(id)
