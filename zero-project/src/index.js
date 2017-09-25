@@ -62,6 +62,15 @@ app.get('/todos', jwtMiddleware, (req, res) => {
     })
 })
 
+app.post('/todos', jwtMiddleware, (req, res) => {
+  const user_id = req.user.id
+  const {title} = req.body
+  query.createTodo(user_id, title)
+    .then(() => {
+      res.end()
+    })
+})
+
 app.listen(3000, () => {
   console.log('listening...')
 })
