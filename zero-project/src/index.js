@@ -91,6 +91,14 @@ app.patch('/todos/:id', jwtMiddleware, (req,res) => {
     })
 })
 
+app.delete('/todos/:id', jwtMiddleware, (req, res) => {
+  const id = req.params.id
+  query.deleteTodoById(id)
+    .then(id => {
+      res.end()
+    })
+})
+
 app.listen(3000, () => {
   console.log('listening...')
 })
