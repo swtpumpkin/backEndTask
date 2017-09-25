@@ -85,8 +85,18 @@ app.post('/todos', jwtMiddleware, (req, res) => {
       res.send(todo)
     })
 })
-class NotFoundError extends Error {}
-class ForbiddenError extends Error {}
+class NotFoundError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'NotFoundError'
+  }
+}
+class ForbiddenError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'ForbiddenError'
+  }
+}
 
 const authorizeTodo = user_id => todo => {
   if(!todo) {
@@ -109,9 +119,7 @@ app.patch('/todos/:id', jwtMiddleware, (req,res, next) => {
     .then(authorizeTodo(user_id))
     .then(() => {
       query.updateTodoById(id, {title, complete})
-        .then(id => {
-          return query.getTodoById(id)
-        })
+        .then(id => query.getTodoById(id))
         .then(todo => {
           res.send(todo)
         })
@@ -124,11 +132,9 @@ app.delete('/todos/:id', jwtMiddleware, (req, res) => {
   const user_id = req.user.id
   query.getTodoById(id)
     .then(authorizeTodo(user_id))
-    .then(() => {
-      query.deleteTodoById(id)
-        .then(id => {
-          res.end()
-        })
+    .then(() => query.deleteTodoById(id))
+    .then(id => {
+      res.end()
     })
     .catch(next)
 })
