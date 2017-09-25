@@ -53,6 +53,15 @@ app.post('/login', (req, res) => {
     })
 })
 
+app.get('/todos', jwtMiddleware, (req, res) => {
+  const user_id = req.user.id
+  // userId가 쇼유하고 있는 할 일 목록을 불어와서환반환
+  query.getTodosByUserId(user_id)
+    .then((todos) => {
+      res.send(todos)
+    })
+})
+
 app.listen(3000, () => {
   console.log('listening...')
 })
