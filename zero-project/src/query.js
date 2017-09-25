@@ -50,7 +50,7 @@ module.exports = {
         title
       })
   },
-  getTodosById(id) {
+  getTodoById(id) {
     return knex('todo')
       .where({id})
       .first()
