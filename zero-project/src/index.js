@@ -64,9 +64,10 @@ app.get('/todos', jwtMiddleware, (req, res) => {
 
 app.post('/todos', jwtMiddleware, (req, res) => {
   const user_id = req.user.id
-  const {title} = req.body
+  const title = req.body.title
   query.createTodo(user_id, title)
     .then(() => {
+      res.status(201)
       res.end()
     })
 })
