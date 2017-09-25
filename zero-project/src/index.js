@@ -14,9 +14,9 @@ app.use(function (err, req, res, next) {
     res.status(401).send({
       error: err.name,
       message: err.message
-    });
+    })
   }
-});
+})
 
 const jwtMiddleware = expressjwt({secret: 'mysecret'})
 
@@ -74,6 +74,19 @@ app.post('/todos', jwtMiddleware, (req, res) => {
     })
     .then(todo => {
       res.status(201)
+      res.send(todo)
+    })
+})
+
+app.patch('/todos/:id', jwtMiddleware, (req,res) => {
+  const id = req.params.id
+  const title = req.body.title
+  const complete = req.body.complete
+  query.updateTodoById(id, {title, complete})
+    .then(id => {
+      return query.getTodosById(id)
+    })
+    .then(todo => {
       res.send(todo)
     })
 })

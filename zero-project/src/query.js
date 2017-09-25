@@ -54,5 +54,10 @@ module.exports = {
     return knex('todo')
       .where({id})
       .first()
+  },
+  updateTodoById(id, {title, complete}){
+    return knex('todo')
+      .where({id})
+      .update({title, complete})
   }
 }
