@@ -15,6 +15,14 @@ app.use(function (err, req, res, next) {
       error: err.name,
       message: err.message
     })
+  } else if (err instanceof NotFoundError){
+    res.status(404).send({
+      message: err.message
+    })
+  } else if (err instanceof ForbiddenError){
+    res.status(403).send({
+      message: err.message
+    })
   }
 })
 
@@ -70,7 +78,7 @@ app.post('/todos', jwtMiddleware, (req, res) => {
   console.log(req.body)
   query.createTodo(user_id, title)
     .then(([id]) => {
-      return query.getTodosById(id)
+      return query.getTodoById(id)
     })
     .then(todo => {
       res.status(201)
@@ -80,53 +88,49 @@ app.post('/todos', jwtMiddleware, (req, res) => {
 class NotFoundError extends Error {}
 class ForbiddenError extends Error {}
 
-app.patch('/todos/:id', jwtMiddleware, (req,res) => {
+const authorizeTodo = user_id => todo => {
+  if(!todo) {
+    // 404 error
+    throw new NotFoundError('경로를 찾을 수 없습니다.')
+  }else if(todo.user_id !== user_id) {
+    // 403 error
+    throw new ForbiddenError('허가되지 않은 접근입니다.')
+  }else {
+    return
+  }
+}
+
+app.patch('/todos/:id', jwtMiddleware, (req,res, next) => {
   const id = req.params.id
   const title = req.body.title
   const complete = req.body.complete
   const user_id = req.user.id
-  query.getTodosById(id)
-    .then(todo => {
-      if(!todo) {
-        // 404 error
-        throw new NotFoundError('경로를 찾을 수 없습니다.')
-      }else if(todo.user_id !== user_id) {
-        // 403 error
-        throw new ForbiddenError('허가되지 않은 접근입니다.')
-      }else {
-        return
-      }
-    })
+  query.getTodoById(id)
+    .then(authorizeTodo(user_id))
     .then(() => {
       query.updateTodoById(id, {title, complete})
         .then(id => {
-          return query.getTodosById(id)
+          return query.getTodoById(id)
         })
         .then(todo => {
           res.send(todo)
         })
     })
-    .catch(err => {
-      if (err instanceof NotFoundError){
-        res.status(404)
-        res.send({
-          message: err.message
-        })
-      } else if (err instanceof ForbiddenError){
-        res.status(403)
-        res.send({
-          message: err.message
-        })
-      }
-    })
+    .catch(next)
 })
 
 app.delete('/todos/:id', jwtMiddleware, (req, res) => {
   const id = req.params.id
-  query.deleteTodoById(id)
-    .then(id => {
-      res.end()
+  const user_id = req.user.id
+  query.getTodoById(id)
+    .then(authorizeTodo(user_id))
+    .then(() => {
+      query.deleteTodoById(id)
+        .then(id => {
+          res.end()
+        })
     })
+    .catch(next)
 })
 
 app.listen(3000, () => {
