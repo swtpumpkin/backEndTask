@@ -77,17 +77,47 @@ app.post('/todos', jwtMiddleware, (req, res) => {
       res.send(todo)
     })
 })
+class NotFoundError extends Error {}
+class ForbiddenError extends Error {}
 
 app.patch('/todos/:id', jwtMiddleware, (req,res) => {
   const id = req.params.id
   const title = req.body.title
   const complete = req.body.complete
-  query.updateTodoById(id, {title, complete})
-    .then(id => {
-      return query.getTodosById(id)
-    })
+  const user_id = req.user.id
+  query.getTodosById(id)
     .then(todo => {
-      res.send(todo)
+      if(!todo) {
+        // 404 error
+        throw new NotFoundError('경로를 찾을 수 없습니다.')
+      }else if(todo.user_id !== user_id) {
+        // 403 error
+        throw new ForbiddenError('허가되지 않은 접근입니다.')
+      }else {
+        return
+      }
+    })
+    .then(() => {
+      query.updateTodoById(id, {title, complete})
+        .then(id => {
+          return query.getTodosById(id)
+        })
+        .then(todo => {
+          res.send(todo)
+        })
+    })
+    .catch(err => {
+      if (err instanceof NotFoundError){
+        res.status(404)
+        res.send({
+          message: err.message
+        })
+      } else if (err instanceof ForbiddenError){
+        res.status(403)
+        res.send({
+          message: err.message
+        })
+      }
     })
 })
 
