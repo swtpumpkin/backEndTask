@@ -7,6 +7,14 @@ const expressjwt = require('express-jwt')
 const app = express()
 
 app.use(bodyParser.json())
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send({
+      error: err.name,
+      message: err.message
+    });
+  }
+});
 
 const jwtMiddleware = expressjwt({secret: 'mysecret'})
 
