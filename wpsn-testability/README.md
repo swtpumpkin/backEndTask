@@ -10,5 +10,5 @@
 - [assert 내장 모듈](https://nodejs.org/api/assert.html)
 - [Mocha test framework](https://mochajs.org/)
 - [SuperAgent](http://visionmedia.github.io/superagent/) & [SuperTest](https://github.com/visionmedia/supertest)
-- [Testability]를 높이기 위한 [의존성 주입](https://ko.wikipedia.org/wiki/%EC%9D%98%EC%A1%B4%EC%84%B1_%EC%A3%BC%EC%9E%85)과 [Sinon](http://sinonjs.org/)
+- [Testability](https://en.wikipedia.org/wiki/Testability)를 높이기 위한 [의존성 주입](https://ko.wikipedia.org/wiki/%EC%9D%98%EC%A1%B4%EC%84%B1_%EC%A3%BC%EC%9E%85)과 [Sinon](http://sinonjs.org/)
 - [지속적인 통합](https://ko.wikipedia.org/wiki/%EC%A7%80%EC%86%8D%EC%A0%81_%ED%86%B5%ED%95%A9) & [Travis CI](https://travis-ci.org/)

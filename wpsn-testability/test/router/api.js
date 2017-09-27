@@ -54,7 +54,7 @@ describe('api', function() {
           assert.equal(res.body.error, 'ValidationError')
         })
     })
-
+    it('새 구독이 일어나면 이메일 발송')
     it.skip('이미 존재하는 이메일에 대해서 에러', function() {
       return request(this.app)
         .post('/api/subscription')
