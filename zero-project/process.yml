@@ -1,0 +1,6 @@
+apps:
+  - name: todo-back-server
+    script: './src/index.js'
+    instances: 8
+    exec_mode: cluster
+    watch: true
