@@ -3,13 +3,47 @@ const assert = require('assert')
 const {
   addAsync,
   addSync,
-  throwErrorIfNegative
+  throwErrorIfNegative,
+  multiSync,
+  multiAsync
 } = require('../src/functions')
 
 describe('functions', function () {
   describe('addSync', function() {
     it('기본 기능', function() {
       const result = addSync(1, 2)
+      assert.equal(result, 3)
+    })
+  })
+
+  describe('multiSync', function() {
+    it('기본 기능', function() {
+      const result = multiSync(1, 3)
+      assert.equal(result, 3)
+    })
+  })
+
+  describe('multiAsync', function() {
+    // 비동기 작업의 테스트가 완료되었다는 사실을 알리기 위해 done 콜백을 호출합니다.
+    it('기본 기능 (done)', function(done) {
+      multiAsync(1, 3)
+        .then(result => {
+          assert.equal(result, 3)
+          done()
+        })
+    })
+
+    // 혹은 Promise를 리턴하거나
+    it('기본 기능 (Promise)', function() {
+      return multiAsync(1, 3)
+        .then(result => {
+          assert.equal(result, 3)
+        })
+    })
+
+    // async/await 를 사용할 수도 있습니다.
+    it('기본 기능 (async/await)', async function() {
+      const result = await multiAsync(1, 3)
       assert.equal(result, 3)
     })
   })
