@@ -29,10 +29,15 @@ function multiSync(x , y) {
   return x * y
 }
 
+function divSync(x, y) {
+  return x / y
+}
+
 module.exports = {
   addSync,
   addAsync,
   throwErrorIfNegative,
   multiSync,
-  multiAsync
+  multiAsync,
+  divSync
 }

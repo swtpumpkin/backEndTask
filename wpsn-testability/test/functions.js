@@ -5,7 +5,8 @@ const {
   addSync,
   throwErrorIfNegative,
   multiSync,
-  multiAsync
+  multiAsync,
+  divSync
 } = require('../src/functions')
 
 describe('functions', function () {
@@ -22,6 +23,14 @@ describe('functions', function () {
       assert.equal(result, 3)
     })
   })
+
+  describe('divSync', function() {
+    it('기본 기능', function() {
+      const result = divSync(4, 2)
+      assert.equal(result, 2)
+    })
+  })
+
 
   describe('multiAsync', function() {
     // 비동기 작업의 테스트가 완료되었다는 사실을 알리기 위해 done 콜백을 호출합니다.
