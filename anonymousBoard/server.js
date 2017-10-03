@@ -46,7 +46,7 @@ app.get('/manage', authMiddleware,(req, res)=>{
 
 //본문 글 페이지 구현
 app.get('/read/:num', (req, res)=> {
-  const num = req.params.num*1
+  const num = parseInt(req.params.num)
   const matched = data.find(item => item.num === num)
   const matchedCom = [comment].filter(items => items.num === num)
   if(matched && matchedCom) {
