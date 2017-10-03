@@ -48,7 +48,7 @@ app.get('/manage', authMiddleware,(req, res)=>{
 app.get('/read/:num', (req, res)=> {
   const num = req.params.num*1
   const matched = data.find(item => item.num === num)
-  const matchedCom = [...comment].filter(items => items.num === num)
+  const matchedCom = [comment].filter(items => items.num === num)
   if(matched && matchedCom) {
     res.render('read.ejs', {matched, matchedCom})
   }else {
