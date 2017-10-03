@@ -77,7 +77,7 @@ app.post('/', bodyParserMiddleware, (req,res) => {
 
 // 댓글 구현
 app.post('/read/:num', bodyParserMiddleware, (req,res) => {
-  const num = req.params.num*1
+  const num = parseInt(req.params.num)
   const reply = req.body.reply
   comment.push({num, reply}) // 객체는 순서가 보장되지 않기때문에 프로퍼티명의 순서를 지킬 필요는 없다.
   res.redirect('/read/'+num) // 302 응답코드
